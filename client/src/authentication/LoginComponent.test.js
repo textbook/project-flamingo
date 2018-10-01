@@ -8,11 +8,22 @@ describe("LoginComponent", () => {
   let wrapper;
   let mockLogin;
   let deferred;
+  let mockLoginSuccessful;
+  let mockLoginFailed;
 
   beforeEach(() => {
     deferred = new Deferred();
     mockLogin = jest.fn(() => deferred.promise);
-    wrapper = shallow(<LoginComponent login={mockLogin} />);
+    mockLoginSuccessful = jest.fn();
+    mockLoginFailed = jest.fn();
+
+    wrapper = shallow(
+      <LoginComponent
+        login={mockLogin}
+        loginSuccessful={mockLoginSuccessful}
+        loginFailed={mockLoginFailed}
+      />
+    );
   });
 
   it("calls login service when clicking button", () => {
@@ -32,7 +43,8 @@ describe("LoginComponent", () => {
     deferred.resolve(false);
 
     setTimeout(() => {
-      expect(wrapper.state().isAuthenticated).toBe(false);
+      expect(mockLoginSuccessful).not.toHaveBeenCalled();
+      expect(mockLoginFailed).toHaveBeenCalled();
       done();
     });
   });
@@ -42,7 +54,8 @@ describe("LoginComponent", () => {
     deferred.resolve(true);
 
     setTimeout(() => {
-      expect(wrapper.state().isAuthenticated).toBe(true);
+      expect(mockLoginSuccessful).toHaveBeenCalled();
+      expect(mockLoginFailed).not.toHaveBeenCalled();
       done();
     });
   });
