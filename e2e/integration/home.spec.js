@@ -39,9 +39,20 @@ context.only("Home Page", () => {
         "contain.text",
         "Grant progress"
       );
+      cy.get("[data-test-id='report-save-button']").should("attr", "disabled");
+
       cy.get('[data-test-id="report-progress-input"] textarea')
         .last()
         .type("report details");
+
+      cy.get("[data-test-id='report-save-button']").click();
+
+      cy.visit("/");
+      cy.get('[data-test-id="report"]').click();
+      cy.get('[data-test-id="report-progress-input"]').should(
+        "contain.text",
+        "report details"
+      );
     });
   });
 });

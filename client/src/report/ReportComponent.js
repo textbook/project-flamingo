@@ -1,10 +1,18 @@
 import React, { Component, Fragment } from "react";
 import HeaderComponent from "../home/HeaderComponent";
-import { Grid, Paper, withStyles, OutlinedInput } from "@material-ui/core";
+import {
+  Button,
+  Grid,
+  Paper,
+  withStyles,
+  OutlinedInput
+} from "@material-ui/core";
+import type { Report } from "./models";
 
 type Props = {
   classes: any,
-  logout: () => void
+  logout: () => void,
+  saveReport: (report: Report) => void
 };
 
 const styles = themes => ({
@@ -28,7 +36,32 @@ const styles = themes => ({
   }
 });
 
-export class ReportComponent extends Component<Props> {
+interface State {
+  report: Report;
+}
+
+export class ReportComponent extends Component<Props, State> {
+  constructor(props: Props) {
+    super(props);
+    this.state = {
+      report: {
+        overview: ""
+      }
+    };
+  }
+
+  saveReport = () => {
+    this.props.saveReport(this.state.report);
+  };
+
+  changeProgressReport = (event: Event) => {
+    this.setState({
+      report: {
+        overview: (event.target: window.HTMLInputElement).value
+      }
+    });
+  };
+
   render() {
     const { classes } = this.props;
 
@@ -65,7 +98,21 @@ export class ReportComponent extends Component<Props> {
                       multiline
                       rows={10}
                       rowsMax={100}
+                      labelWidth={0}
+                      onChange={event => this.changeProgressReport(event)}
                     />
+                  </Grid>
+                  <Grid item>
+                    <Button
+                      data-test-id="report-save-button"
+                      color="primary"
+                      variant="outlined"
+                      disabled={this.state.report.overview === ""}
+                      fullWidth={false}
+                      onClick={() => this.saveReport()}
+                    >
+                      Save
+                    </Button>
                   </Grid>
                 </Grid>
               </Paper>
