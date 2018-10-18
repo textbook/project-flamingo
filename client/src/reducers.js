@@ -5,14 +5,16 @@ export type State = {
   isAuthenticated: ?boolean,
   reports: ?(Report[]),
   savedReport: ?boolean,
-  account: ?Account
+  account: ?Account,
+  isLoading: boolean
 };
 
 export const initialState: State = {
   isAuthenticated: undefined,
   reports: undefined,
   savedReport: undefined,
-  account: undefined
+  account: undefined,
+  isLoading: false
 };
 
 type Action = {
@@ -70,6 +72,20 @@ const reducers = (state: State = initialState, action: Action): State => {
       return {
         ...state,
         savedReport: false
+      };
+    }
+
+    case "SET_LOADING": {
+      return {
+        ...state,
+        isLoading: true
+      };
+    }
+
+    case "SET_NOT_LOADING": {
+      return {
+        ...state,
+        isLoading: false
       };
     }
 

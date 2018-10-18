@@ -47,13 +47,12 @@ describe("reducers", () => {
       isAuthenticated: true,
       reports: undefined,
       savedReport: undefined,
-      account: account
+      account: account,
+      isLoading: false
     };
     const expectedState: State = {
-      isAuthenticated: true,
-      reports,
-      savedReport: undefined,
-      account: account
+      ...startingState,
+      reports
     };
 
     expect(
@@ -83,7 +82,8 @@ describe("reducers", () => {
       isAuthenticated: true,
       reports: undefined,
       savedReport: undefined,
-      account: account
+      account: account,
+      isLoading: false
     };
 
     let newState = reducers(startingState, {
@@ -139,5 +139,20 @@ describe("reducers", () => {
         type: "SAVE_REPORT_FAILURE"
       }).savedReport
     ).toEqual(false);
+  });
+
+  it("should handle SET_LOADING", () => {
+    expect(reducers(initialState, { type: "SET_LOADING" }).isLoading).toBe(
+      true
+    );
+  });
+
+  it("should handle SET_NOT_LOADING", () => {
+    expect(
+      reducers(
+        { ...initialState, isLoading: true },
+        { type: "SET_NOT_LOADING" }
+      ).isLoading
+    ).toBe(false);
   });
 });

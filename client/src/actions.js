@@ -16,8 +16,16 @@ export const logout = () => ({
   type: "SET_LOGGED_OUT"
 });
 
+export const requestStarted = () => ({
+  type: "SET_LOADING"
+});
+
+export const requestFinished = () => ({
+  type: "SET_NOT_LOADING"
+});
+
 export const login = (credentials: Credentials) => (dispatch: Dispatch<any>) =>
-  fetch("/api/login", {
+  makeRequest(dispatch, "/api/login", {
     method: "POST",
     headers: { "content-type": "application/json" },
     body: JSON.stringify(credentials)
@@ -37,7 +45,7 @@ export const receivedReports = (reports: Report[]) => ({
 });
 
 export const loadReports = () => (dispatch: Dispatch<any>) => {
-  fetch("/api/reports")
+  makeRequest(dispatch, "/api/reports")
     .then(res => res.json())
     .then((reports: any) => {
       dispatch(receivedReports(reports));
@@ -54,7 +62,7 @@ export const updateReportFailed = () => ({
 });
 
 export const updateReport = (report: Report) => (dispatch: Dispatch<any>) => {
-  fetch(`/api/reports/${report.id}`, {
+  makeRequest(dispatch, `/api/reports/${report.id}`, {
     method: "PUT",
     headers: { "content-type": "application/json" },
     body: JSON.stringify(report)
@@ -64,5 +72,17 @@ export const updateReport = (report: Report) => (dispatch: Dispatch<any>) => {
     } else {
       dispatch(updateReportFailed());
     }
+  });
+};
+
+const makeRequest = (
+  dispatch: Dispatch<any>,
+  url: string,
+  options?: any = undefined
+) => {
+  dispatch(requestStarted());
+  return fetch(url, options).then(res => {
+    dispatch(requestFinished());
+    return res;
   });
 };

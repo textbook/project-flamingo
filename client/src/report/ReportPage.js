@@ -9,7 +9,8 @@ import type { Report } from "./models";
 const mapStateToProps = (state: State): any => ({
   isAuthenticated: state.isAuthenticated,
   reports: state.reports,
-  account: state.account
+  account: state.account,
+  isLoading: state.isLoading
 });
 
 const mapDispatchToProps = (dispatch: Dispatch<any>): any => ({
