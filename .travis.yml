@@ -3,6 +3,7 @@ language: node_js
 branches:
   only:
     - master
+    - workflow-demo
     - /^v[\d\.]*$/
 
 cache: yarn
@@ -39,19 +40,11 @@ deploy:
     username: $CF_USERNAME
     password: $CF_PASSWORD
     api: https://api.run.pivotal.io
-    organization: digital-coe
-    space: flamingo-dev
+    organization: labs-playground
+    space: jsharpe
     on:
+      branch: workflow-demo
       tags: false
-
-  - provider: cloudfoundry
-    username: $CF_USERNAME
-    password: $CF_PASSWORD
-    api: https://api.run.pivotal.io
-    organization: digital-coe
-    space: flamingo-prod
-    on:
-      tags: true
 
 after_script:
   - ./coverage.sh
