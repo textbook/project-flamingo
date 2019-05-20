@@ -69,6 +69,7 @@ describe("ReportCardComponent", () => {
     };
 
     beforeEach(() => {
+      MockDate.set(new Date(2018, 9, 15));
       wrapper = shallow(
         <ReportCardComponent
           report={incompleteReport}
