@@ -49,6 +49,26 @@ export class ReportCardComponent extends Component<Props> {
     });
   };
 
+  renderReportStatus(report: Report, classes: any) {
+    const status
+      = report.completed && report.submissionDate
+        ? moment(report.submissionDate).format("DD/MM/YYYY")
+        : moment(report.dueDate).format("DD/MM/YYYY");
+    const chipClasses = {
+      label: classes.dueDateLabel,
+      outlined: classes.dueDateOutlined
+    };
+
+    return (
+      <Chip
+        label={status}
+        classes={chipClasses}
+        variant="outlined"
+        data-test-id="report-status"
+      />
+    );
+  }
+
   render() {
     const { report, classes } = this.props;
 
@@ -88,19 +108,7 @@ export class ReportCardComponent extends Component<Props> {
                 className={`${classes.reportStatus} ${classes.notFullWidth}`}
                 alignItems="center"
               >
-                <Chip
-                  label={
-                    report.completed && report.submissionDate
-                      ? moment(report.submissionDate).format("DD/MM/YYYY")
-                      : moment(report.dueDate).format("DD/MM/YYYY")
-                  }
-                  classes={{
-                    label: classes.dueDateLabel,
-                    outlined: classes.dueDateOutlined
-                  }}
-                  variant="outlined"
-                  data-test-id="report-status"
-                />
+                {this.renderReportStatus(report, classes)}
                 {report.completed && (
                   <Button
                     data-test-id="report-unsubmit-button"
