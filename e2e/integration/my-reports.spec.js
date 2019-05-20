@@ -224,6 +224,25 @@ context("My Reports Page", () => {
     });
   });
 
+  context("Ellen's report is due", () => {
+    beforeEach(() => {
+      cy.clock(new Date(2018, 8, 2).getTime());
+      cy.seed("one-incomplete-report.json");
+      cy.login("ellen@ip.org");
+    });
+
+    it("shows when the report is due ", () => {
+      myReportsPage.getReports("incomplete").should("have.length", 1);
+      myReportsPage.getFirstReport("incomplete").within(() => {
+        myReportsPage.verifyReportData({
+          grantName: "Grant Mitchell",
+          reportStatus: "Due in 5 days",
+          reportPeriod: "August 2018"
+        });
+      });
+    });
+  });
+
   context("Helen is logged in", () => {
     beforeEach(() => {
       cy.seed("multiple-incomplete-reports.json");
