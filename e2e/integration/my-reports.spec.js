@@ -7,6 +7,7 @@ context("My Reports Page", () => {
 
   context("Ellen is logged in", () => {
     beforeEach(() => {
+      cy.clock(new Date(2018, 7, 15).getTime());
       cy.seed("one-incomplete-report.json");
       cy.login("ellen@ip.org", "flamingo");
     });
@@ -245,6 +246,7 @@ context("My Reports Page", () => {
 
   context("Helen is logged in", () => {
     beforeEach(() => {
+      cy.clock(new Date(2018, 7, 15).getTime());
       cy.seed("multiple-incomplete-reports.json");
       cy.login("helen@ip.org");
     });
