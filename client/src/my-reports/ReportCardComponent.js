@@ -56,6 +56,8 @@ export class ReportCardComponent extends Component<Props> {
 
     if (report.completed && report.submissionDate) {
       status = moment(report.submissionDate).format("DD/MM/YYYY");
+    } else if (delta < 0) {
+      status = `${dueDate.fromNow(true)} late`;
     } else if (delta < 8) {
       status = `Due in ${dueDate.fromNow(true)}`;
     } else {
