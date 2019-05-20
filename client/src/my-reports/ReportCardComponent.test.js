@@ -178,4 +178,38 @@ describe("ReportCardComponent", () => {
       ).toContain("Due in 4 days");
     });
   });
+
+  describe("late report", () => {
+    const incompleteReport: Report = {
+      grant: "Hello world",
+      overview: "Hi!",
+      completed: false,
+      id: 1,
+      reportPeriod: "2018-10-01T00:00:00.000Z",
+      dueDate: "2018-11-07T00:00:00.000Z",
+      keyActivity: {},
+      operatingEnvironment: "",
+      beneficiaryFeedback: ""
+    };
+
+    beforeEach(() => {
+      MockDate.set(new Date(2018, 10, 10));
+      wrapper = shallow(
+        <ReportCardComponent
+          report={incompleteReport}
+          updateReport={() => {}}
+          classes={{}}
+        />
+      );
+    });
+
+    it("shows the overdue time as the status", () => {
+      expect(
+        wrapper
+          .find('[data-test-id="report-status"]')
+          .render()
+          .text()
+      ).toContain("3 days late");
+    });
+  });
 });
