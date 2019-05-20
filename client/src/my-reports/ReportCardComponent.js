@@ -50,10 +50,17 @@ export class ReportCardComponent extends Component<Props> {
   };
 
   renderReportStatus(report: Report, classes: any) {
-    const status
-      = report.completed && report.submissionDate
-        ? moment(report.submissionDate).format("DD/MM/YYYY")
-        : moment(report.dueDate).format("DD/MM/YYYY");
+    const dueDate = moment(report.dueDate);
+    const delta = dueDate.diff(moment(), "days");
+    let status: string;
+
+    if (report.completed && report.submissionDate) {
+      status = moment(report.submissionDate).format("DD/MM/YYYY");
+    } else if (delta < 8) {
+      status = `Due in ${dueDate.fromNow(true)}`;
+    } else {
+      status = moment(report.dueDate).format("DD/MM/YYYY");
+    }
     const chipClasses = {
       label: classes.dueDateLabel,
       outlined: classes.dueDateOutlined
