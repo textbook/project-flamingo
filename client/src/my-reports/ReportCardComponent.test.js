@@ -1,5 +1,6 @@
 import React from "react";
 import { shallow } from "enzyme";
+import MockDate from "mockdate";
 
 import { ReportCardComponent } from "./ReportCardComponent";
 import type { Report } from "../report/models";
@@ -26,6 +27,10 @@ describe("ReportCardComponent", () => {
         classes={{}}
       />
     );
+  });
+
+  afterEach(() => {
+    MockDate.reset();
   });
 
   it("shows the report", () => {
@@ -136,6 +141,40 @@ describe("ReportCardComponent", () => {
 
       wrapper.find('[data-test-id="report-unsubmit-button"]').simulate("click");
       expect(mockUpdateReport).toHaveBeenCalledWith(unsubmittedReport);
+    });
+  });
+
+  describe("due report", () => {
+    const incompleteReport: Report = {
+      grant: "Hello world",
+      overview: "Hi!",
+      completed: false,
+      id: 1,
+      reportPeriod: "2018-10-01T00:00:00.000Z",
+      dueDate: "2018-11-07T00:00:00.000Z",
+      keyActivity: {},
+      operatingEnvironment: "",
+      beneficiaryFeedback: ""
+    };
+
+    beforeEach(() => {
+      MockDate.set(new Date(2018, 10, 3));
+      wrapper = shallow(
+        <ReportCardComponent
+          report={incompleteReport}
+          updateReport={() => {}}
+          classes={{}}
+        />
+      );
+    });
+
+    it("shows the remaining time as the status", () => {
+      expect(
+        wrapper
+          .find('[data-test-id="report-status"]')
+          .render()
+          .text()
+      ).toContain("Due in 4 days");
     });
   });
 });
